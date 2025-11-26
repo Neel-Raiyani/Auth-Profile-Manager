@@ -39,7 +39,7 @@ exports.register = async (req, res) => {
         const token = await jwt.sign(
             { id: newUser._id },
             Secret_key,
-            { expiresIn: JWT_Access_Expiry}
+            { expiresIn: JWT_Access_Expiry }
         );
 
         await newUser.save();
@@ -77,7 +77,7 @@ exports.login = async (req, res) => {
         const refreshToken = await jwt.sign(
             { id: user._id },
             Refresh_key,
-            {expiresIn: JWT_Refresh_Expiry}
+            { expiresIn: JWT_Refresh_Expiry }
         );
 
         user.refreshToken = refreshToken;
@@ -125,7 +125,7 @@ exports.refresh = async (req, res) => {
         const newRefreshToken = await jwt.sign(
             { id: user._id },
             Refresh_key,
-            {expiresIn: JWT_Refresh_Expiry}
+            { expiresIn: JWT_Refresh_Expiry }
         );
 
         user.refreshToken = newRefreshToken;
@@ -153,4 +153,9 @@ exports.getUser = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 }
+
+
+
+
+
 
