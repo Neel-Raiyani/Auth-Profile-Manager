@@ -55,13 +55,13 @@ npm start
 }
 ```
 3. Current User - **GET**/auth/me
-***http://localhost:3018/auth/me***
+***http://localhost:3018/auth/me***  
 Header:
 ``` bash
 Authorization: Bearedr <Token>
 ```
 4. Profile - **Get**/profile
-***http://localhost:3018/profile***
+***http://localhost:3018/profile***  
 Header:
 ``` bash
 Authorization: Bearedr <Token>
