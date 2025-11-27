@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const path = require('path');
 
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
@@ -11,7 +12,7 @@ const PORT = process.env.PORT || 1818;
 connectDB();
 
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.use('/auth', userRoutes);
 app.use('/', profileRoute);

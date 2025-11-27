@@ -33,12 +33,17 @@ JWT_REFRESH_EXPIRES_IN = Refresh Token Expiry Time
 ``` bash
 npm start
 ```
+5. Create a folder named **uploads** in the root directory, and inside it create another folder named **avatar**.
+``` bash
+uploads/avatar/
+```
 ---
 
 ## API Endpoints
 
 1. Register - **POST**/auth/register
-***http://localhost:3018/auth/register***
+***http://localhost:3018/auth/register***  
+Body: 
 ``` bash
 {
   "name": "John Doe",
@@ -47,7 +52,8 @@ npm start
 }
 ```
 2. Login - **POST**/auth/login
-***http://localhost:3018/auth/login***
+***http://localhost:3018/auth/login***  
+Body:
 ``` bash
 {
   "email": "john@example.com",
@@ -67,7 +73,12 @@ Header:
 Authorization: Bearedr <Token>
 ```
 5. Update Profile - **PUT**/profile
-***http://localhost:3018/profile***
+***http://localhost:3018/profile***  
+Header:
+``` bash
+Authorization: Bearedr <Token>
+```  
+Body:
 ``` bash 
 {
   "name": "New Name",
@@ -75,7 +86,12 @@ Authorization: Bearedr <Token>
 }
 ```
 6. Change Password - **PUT**/profile/change-password
-***http://localhost:3018/profile/change-password***
+***http://localhost:3018/profile/change-password***  
+Header:
+``` bash
+Authorization: Bearedr <Token>
+```  
+Body:
 ``` bash 
 {
   "currentPassword": "OldPass",
@@ -83,8 +99,12 @@ Authorization: Bearedr <Token>
 }
 ```
 7. Profile Image Upload - **PUT**/profile/avatar
-***http://localhost:3018/profile/avatar***
-Form Data
+***http://localhost:3018/profile/avatar***  
+Header:
+``` bash
+Authorization: Bearedr <Token>
+```  
+Form Data:
 ```bash
 key: avatar
 type: File

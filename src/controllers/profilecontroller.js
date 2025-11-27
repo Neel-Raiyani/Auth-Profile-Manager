@@ -28,7 +28,7 @@ exports.updateProfile = async (req, res) => {
             userId,
             { name, bio },
             { new: true }
-        )
+        ).select("-refreshToken");
 
         res.json({ message: "User updated successfully", Updated_user: update });
 
