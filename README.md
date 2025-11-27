@@ -29,13 +29,13 @@ REFRESH_SECRET = "Refresh Secret Key"
 JWT_ACCESS_EXPIRES_IN = Access Token Expiry Time (example: 15m or 1h)
 JWT_REFRESH_EXPIRES_IN = Refresh Token Expiry Time
 ```
-4. Start server
-``` bash
-npm start
-```
-5. Create a folder named **uploads** in the root directory, and inside it create another folder named **avatar**.
+4. Create a folder named ***uploads*** in the root directory, and inside it create another folder named ***avatar***.
 ``` bash
 uploads/avatar/
+```
+5. Start server
+``` bash
+npm start
 ```
 ---
 
