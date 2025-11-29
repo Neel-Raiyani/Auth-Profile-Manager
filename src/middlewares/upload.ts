@@ -1,7 +1,7 @@
-const multer = require('multer');
-const path = require('path');
-
-
+import type { Express, Request } from "express";
+import type {FileFilterCallback} from "multer";
+import multer from "multer";
+import path from "path";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -13,16 +13,16 @@ const storage = multer.diskStorage({
     }
 });
 
-function fileFilter(req, file, cb) {
+function fileFilter(req: Request, file: Express.Multer.File, cb: FileFilterCallback) {
     const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
     if (allowed.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new Error('Only JPG, JPEG, and PNG files are allowed'), false);
+        cb(new Error('Only JPG, JPEG, and PNG files are allowed'));
     }
 }
 
 const upload = multer({ storage, fileFilter,limits: {fileSize: 20 * 1024 * 1024} });
 
-module.exports = upload;
+export default upload;

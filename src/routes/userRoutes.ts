@@ -1,9 +1,9 @@
-const express = require('express');
+import express from "express"
 const router = express.Router();
-const {register, login, refresh, getUser} = require('../controllers/userController');
-const validate  = require('../middlewares/validation');
-const auth = require('../middlewares/auth');
-const {body} = require('express-validator');
+import {register, login, refresh, getUser} from "../controllers/userController.js";
+import validate from "../middlewares/validation.js";
+import auth from "../middlewares/auth.js";
+import {body} from "express-validator";
 
 router.post('/register', [
     body('name').notEmpty().withMessage("Name is required"),
@@ -20,4 +20,4 @@ router.post('/refresh', refresh);
 
 router.get('/me', auth, getUser);
 
-module.exports = router;
+export default router;

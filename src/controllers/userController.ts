@@ -1,14 +1,20 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
-require('dotenv').config();
+import { Request, Response } from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
+import User from "../models/userModel.js";
+import dotenv from "dotenv";
+import { signJwt } from "../utils/jwt.js";
+dotenv.config()
 
-const Secret_key = process.env.JWT_SECRET;
-const Refresh_key = process.env.REFRESH_SECRET;
-const JWT_Access_Expiry = process.env.JWT_ACCESS_EXPIRES_IN;
-const JWT_Refresh_Expiry = process.env.JWT_REFRESH_EXPIRES_IN;
+const Secret_key = process.env.JWT_SECRET!;
+const Refresh_key = process.env.REFRESH_SECRET!;
 
-exports.register = async (req, res) => {
+interface JwtPayloadType extends JwtPayload {
+    id: string;
+};
+
+export const register = async (req: Request, res: Response) => {
     try {
         const { name, email, password } = req.body;
 
@@ -36,23 +42,27 @@ exports.register = async (req, res) => {
 
         })
 
-        const token = await jwt.sign(
-            { id: newUser._id },
+        const token = await signJwt(
+            { id: newUser._id.toString() },
             Secret_key,
-            { expiresIn: JWT_Access_Expiry }
+            { expiresIn: "15m" }
         );
 
         await newUser.save();
         res.status(201).json({ message: "User registered Successfully!!!", user: responseData, token });
 
     } catch (error) {
-        res.status(500).json({ message: "Server error!", error: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ message: "Server error!", error: error.message });
+        } else {
+            res.status(500).json({ message: "Server error!", error: String(error) });
+        }
     }
 }
 
 
 
-exports.login = async (req, res) => {
+export const login = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
 
@@ -68,16 +78,16 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: "Incorrect password!!!" });
         }
 
-        const token = await jwt.sign(
-            { id: user._id },
+        const token = await signJwt(
+            { id: user._id.toString() },
             Secret_key,
-            { expiresIn: JWT_Access_Expiry }
+            { expiresIn: "15m" }
         );
 
-        const refreshToken = await jwt.sign(
-            { id: user._id },
+        const refreshToken = await signJwt(
+            { id: user._id.toString() },
             Refresh_key,
-            { expiresIn: JWT_Refresh_Expiry }
+            { expiresIn: "1d" }
         );
 
         user.refreshToken = refreshToken;
@@ -94,13 +104,17 @@ exports.login = async (req, res) => {
         res.json({ message: "User Logged in successfylly", user: responseData, Access_Token: token, Refresh_token: refreshToken });
 
     } catch (error) {
-        res.status(500).json({ message: "Server error!", error: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ message: "Server error!", error: error.message });
+        } else {
+            res.status(500).json({ message: "Server error!", error: String(error) });
+        }
     }
 }
 
 
 
-exports.refresh = async (req, res) => {
+export const refresh = async (req: Request, res: Response) => {
     const { refreshToken } = req.body;
 
     if (!refreshToken) {
@@ -114,18 +128,18 @@ exports.refresh = async (req, res) => {
     }
 
     try {
-        const decoded = jwt.verify(refreshToken, Refresh_key);
+        const decoded = jwt.verify(refreshToken, Refresh_key) as JwtPayloadType;
 
-        const newAccessToken = jwt.sign(
-            { id: decoded._id },
+        const newAccessToken = await signJwt(
+            { id: decoded.id.toString() } as JwtPayloadType,
             Secret_key,
-            { expiresIn: JWT_Access_Expiry }
+            { expiresIn: "15m" }
         );
 
-        const newRefreshToken = await jwt.sign(
-            { id: user._id },
+        const newRefreshToken = await signJwt(
+            { id: user._id.toString() } as JwtPayloadType,
             Refresh_key,
-            { expiresIn: JWT_Refresh_Expiry }
+            { expiresIn: "1d" }
         );
 
         user.refreshToken = newRefreshToken;
@@ -140,7 +154,7 @@ exports.refresh = async (req, res) => {
 
 
 
-exports.getUser = async (req, res) => {
+export const getUser = async (req: Request, res: Response) => {
     try {
         const user = await User.findById(req.userId).select("_id name email bio avatarUrl");
 

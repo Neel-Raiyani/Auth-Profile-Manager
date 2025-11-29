@@ -1,8 +1,8 @@
-const User = require('../models/userModel');
-const bcrypt = require('bcrypt');
-const multer = require('multer');
+import type { Request, Response } from "express";
+import User from "../models/userModel.js";
+import bcrypt from "bcrypt";
 
-exports.profile = async (req, res) => {
+export const profile = async (req: Request, res: Response) => {
     try {
         const user = await User.findById(req.userId).select("_id name email bio avatarUrl");
 
@@ -18,7 +18,7 @@ exports.profile = async (req, res) => {
 
 
 
-exports.updateProfile = async (req, res) => {
+export const updateProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.userId;
 
@@ -39,7 +39,7 @@ exports.updateProfile = async (req, res) => {
 
 
 
-exports.changepassword = async (req, res) => {
+export const changepassword = async (req: Request, res: Response) => {
     try {
         const userId = req.userId;
 
@@ -74,7 +74,7 @@ exports.changepassword = async (req, res) => {
 
 
 
-exports.avatar = async (req, res) => {
+export const avatar = async (req: Request, res: Response) => {
     try {
         const userId = req.userId
 
