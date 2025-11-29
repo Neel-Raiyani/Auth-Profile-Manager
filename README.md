@@ -1,5 +1,5 @@
 # Auth-Profile-Manager
-## This is simple Express.js server that :
+## This is simple Express + TypeScript server that :
 - Registers a user and generate access token.
 - Login user and generate both access & refresh token.
 - Get current user(Me).
@@ -26,8 +26,6 @@ PORT = 3018
 MONGO_URI = "Your MongoDB URL"
 JWT_SECRET = "JWT Secret Key"
 REFRESH_SECRET = "Refresh Secret Key"
-JWT_ACCESS_EXPIRES_IN = Access Token Expiry Time (example: 15m or 1h)
-JWT_REFRESH_EXPIRES_IN = Refresh Token Expiry Time
 ```
 4. Create a folder named ***uploads*** in the root directory, and inside it create another folder named ***avatar***.
 ``` bash
@@ -110,7 +108,14 @@ key: avatar
 type: File
 value: <select image file>
 ```
-
+8. Regenerate Access Token - **POST**/auth/refresh
+***http://localhost:3018/auth/refresh***  
+Body:
+``` bash 
+{
+  "refreshToken": "Your Refresh Token",
+}
+```
 
 
 
